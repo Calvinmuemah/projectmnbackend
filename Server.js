@@ -19,6 +19,9 @@ app.use(cors({
   // methods: ['GET', 'POST',"PUT", "DELETE"],
 }));
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
