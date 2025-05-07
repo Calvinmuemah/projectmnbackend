@@ -22,6 +22,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'https://i.pravatar.cc/150',
   },
+  resetToken: String,
+  resetTokenExpiry: Date, // or Number, depending on how you're storing time
 });
 
 const User = mongoose.model('User', userSchema);

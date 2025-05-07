@@ -1,8 +1,8 @@
 const express = require('express');
-const { body } = require('express-validator');
-const { register, login, forgotPassword, resetPassword } = require('../Controllers/AuthController');
-
 const router = express.Router();
+const { body } = require('express-validator');
+const { register, login, forgotPassword, reset_password, verify_reset_token } = require('../Controllers/AuthController');
+
 
 // Register
 router.post(
@@ -27,7 +27,7 @@ router.post(
 
 // Forgot Password
 router.post(
-  'forgotPassword',
+  '/forgotPassword',
   [
     body('email').isEmail().withMessage('Valid email is required'),
   ],
@@ -35,12 +35,17 @@ router.post(
 );
 
 // Reset Password
+// Reset Password
 router.post(
-  '/reset-password',
+  '/reset_password',
   [
     body('token').notEmpty().withMessage('Reset token is required'),
-    body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   ],
-  resetPassword
+  reset_password
 );
+// Verify Reset Token
+router.get('/verify-reset-token/:token', verify_reset_token);
+
+
 module.exports = router;
