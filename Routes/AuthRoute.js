@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const { register, login, forgotPassword, reset_password, verify_reset_token } = require('../Controllers/AuthController');
+const protect = require('../Middlewares/AuthMiddlewares');
+const { register, login, forgotPassword, reset_password, verify_reset_token, updateProfile } = require('../Controllers/AuthController');
 
 
 // Register
@@ -34,7 +35,7 @@ router.post(
   forgotPassword
 );
 
-// Reset Password
+
 // Reset Password
 router.post(
   '/reset_password',
@@ -46,6 +47,10 @@ router.post(
 );
 // Verify Reset Token
 router.get('/verify-reset-token/:token', verify_reset_token);
+
+// update-profile
+router.put('/update-profile', protect, updateProfile); 
+
 
 
 module.exports = router;

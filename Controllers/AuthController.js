@@ -244,6 +244,35 @@ const verify_reset_token = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user; // Using req.user directly, as it contains the user ID
+    const { name, email, avatar, password } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (avatar) user.avatar = avatar;
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    await user.save();
+
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    res.json(userResponse);
+  } catch (err) {
+    console.error('Update profile error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 
-module.exports = { register, login, forgotPassword, reset_password, verify_reset_token };
+
+module.exports = { register, login, forgotPassword, reset_password, verify_reset_token, updateProfile };
